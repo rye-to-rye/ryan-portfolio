@@ -1,0 +1,211 @@
+@import 'tailwindcss';
+
+/* ------------------------------------------------------------------ Tokens */
+@theme {
+  --color-obsidian: #090b10;
+  --color-ink: #0d1017;
+  --color-graphite: #181c27;
+  --color-graphite-2: #212637;
+  --color-violet: #8b5cf6;
+  --color-violet-soft: #a78bfa;
+  --color-violet-deep: #6d28d9;
+  --color-violet-strong: #7c3aed; /* solid buttons: white text passes WCAG AA (5.7:1) */
+  --color-cyan: #22d3ee;
+  --color-paper: #f5f7fa;
+  --color-muted: #9aa4b2;
+  --color-line: rgb(154 164 178 / 0.14);
+  --color-line-strong: rgb(154 164 178 / 0.26);
+
+  --font-display: 'Space Grotesk Variable', 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Inter Variable', 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Consolas, monospace;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --animate-wave: wave 1.4s ease-in-out infinite;
+  --animate-float-slow: float-slow 7s ease-in-out infinite;
+  --animate-cue: cue 2.2s var(--ease-out-expo) infinite;
+
+  @keyframes wave {
+    0%, 100% { transform: scaleY(0.35); }
+    50% { transform: scaleY(1); }
+  }
+  @keyframes float-slow {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  @keyframes cue {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(220%); }
+  }
+}
+
+/* -------------------------------------------------------------------- Base */
+@layer base {
+  html {
+    background: var(--color-obsidian);
+    color-scheme: dark;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    background: var(--color-obsidian);
+    color: var(--color-paper);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+
+  section[id], [data-anchor] {
+    scroll-margin-top: 5.5rem;
+  }
+
+  ::selection {
+    background: rgb(139 92 246 / 0.45);
+    color: #fff;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-violet-soft);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+  p { text-wrap: pretty; }
+}
+
+/* --------------------------------------------------------------- Utilities */
+@utility container-page {
+  width: 100%;
+  max-width: 80rem; /* 1280px */
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 4vw, 2.5rem);
+}
+
+@utility mono-label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+@utility text-gradient {
+  background: linear-gradient(100deg, #c4b5fd 0%, #8b5cf6 55%, #22d3ee 120%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility hairline {
+  border-color: var(--color-line);
+}
+
+/* --------------------------------------------------------- Special effects */
+
+/* Fine film grain — a tiny static SVG noise texture, no runtime cost. */
+.grain::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Thin engineering grid that fades out at the edges. */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, rgb(154 164 178 / 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(154 164 178 / 0.07) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 70% 60% at 60% 40%, #000 30%, transparent 75%);
+}
+
+/* Panels: graphite surface with a whisper of a top highlight. */
+.surface {
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.035), rgb(255 255 255 / 0) 40%),
+    var(--color-graphite);
+  border: 1px solid var(--color-line);
+}
+
+/* Animated gradient border on hover / focus-within (used sparingly). */
+.glow-border {
+  position: relative;
+  isolation: isolate;
+}
+.glow-border::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(130deg, rgb(139 92 246 / 0.9), rgb(139 92 246 / 0) 40%, rgb(34 211 238 / 0) 70%, rgb(34 211 238 / 0.7));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-out-expo);
+  pointer-events: none;
+  z-index: -1;
+}
+.glow-border:hover::before,
+.glow-border:focus-within::before {
+  opacity: 1;
+}
+
+/* Arrow nudge used by links. */
+.arrow-link svg.arrow {
+  transition: transform 0.35s var(--ease-out-expo);
+}
+.arrow-link:hover svg.arrow,
+.arrow-link:focus-visible svg.arrow {
+  transform: translate(3px, -3px);
+}
+
+/* Scroll cue line. */
+.cue-track {
+  position: relative;
+  overflow: hidden;
+}
+.cue-track::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 45%;
+  background: linear-gradient(to bottom, transparent, var(--color-violet-soft));
+  animation: var(--animate-cue);
+}
+
+/* PainPortal teleporting button. */
+.teleport {
+  transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .cue-track::after { display: none; }
+}

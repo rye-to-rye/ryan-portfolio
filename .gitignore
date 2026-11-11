@@ -1,0 +1,38 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+dist-ssr/
+
+# environment files (never commit secrets)
+.env
+.env.*
+!.env.example
+*.local
+
+# deployment / tooling
+.vercel/
+
+# logs
+npm-debug.log*
+*.log
+
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# local-only files (not part of the website)
+# working copies of the résumé — the published one lives in public/resume.pdf
+/resume.pdf
+/resume-updated.pdf
+/resume-updated.pdf.pdf
+# Claude Code planning prompts and source content notes
+/CLAUDE_CODE_MASTER_PROMPT.md
+/CLAUDE_CODE_START_HERE.md
+/portfolio_project_copy_v2.md
+/portfolio_projects_v2.json
